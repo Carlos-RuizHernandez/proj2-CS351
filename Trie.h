@@ -1,7 +1,7 @@
 
 #ifndef _MY_TRIE_H
 #define _MY_TRIE_H
-
+#define LETTERS 26
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,18 +20,47 @@ class Trie {
     //   definition of trie node structure
     //   private helper functions
     //   etc.
-    
 
+    struct TrieNode {
+      TrieNode* children[LETTERS];
+      bool isLeaf;
+    };
+    int wordCount;
+    TrieNode* root;
+    
+    TrieNode* newNode() {
+      TrieNode* newNode = new TrieNode;
+      newNode->isLeaf = false;
+      for (int i = 0; i < LETTERS; i++) {
+        newNode->children[i] = NULL;
+      }
+      return newNode;
+    }
+
+    void freeTrieNode(TrieNode* node) {
+      // Free the trienode sequence
+      for(int i = 0; i < LETTERS; i++) {
+        if (node->children[i] != NULL) {
+            freeTrieNode(node->children[i]);
+        }
+        else {
+            continue;
+        }
+    }
+    free(node);
+    }
   public:
     /**
     * constructor and destructor
     */
     Trie()   {
-
       // your constructor code here!
+      root = newNode();
+      wordCount = 0;
     }
     ~Trie(){
       // your destructor code here.
+      freeTrieNode(root);
     }
 
     /*
