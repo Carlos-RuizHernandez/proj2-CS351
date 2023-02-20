@@ -112,6 +112,7 @@ class Trie {
       
       // if word doesnt exist yet, mark final letter as a leaf and return true
       cur->isLeaf = true;
+      wordCount++;
       return true;
     }
 
