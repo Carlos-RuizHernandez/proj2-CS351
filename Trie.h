@@ -21,13 +21,27 @@ class Trie {
     //   private helper functions
     //   etc.
 
+
+    //
+    // Struct for Trie Nodes
+    // Contains array of 'letters' used for paths for words
+    // also contains a boolean to check if node is last in a word
+    //
     struct TrieNode {
       TrieNode* children[LETTERS];
       bool isLeaf;
     };
+
+    // keep track of # of words in tree (need for O(1) runtime on wordCount())
     int wordCount;
+
+    // data member to keep track of root
     TrieNode* root;
     
+    //
+    // newNode()
+    // function creates, initializes, and returns a new TrieNode
+    //
     TrieNode* newNode() {
       TrieNode* newNode = new TrieNode;
       newNode->isLeaf = false;
@@ -37,6 +51,10 @@ class Trie {
       return newNode;
     }
 
+    //
+    // freeTrieNode()
+    // function frees all nodes in the tree
+    //
     void freeTrieNode(TrieNode* node) {
       // Free the trienode sequence
       for(int i = 0; i < LETTERS; i++) {
