@@ -21,13 +21,27 @@ class Trie {
     //   private helper functions
     //   etc.
 
+
+    //
+    // Struct for Trie Nodes
+    // Contains array of 'letters' used for paths for words
+    // also contains a boolean to check if node is last in a word
+    //
     struct TrieNode {
       TrieNode* children[LETTERS];
       bool isLeaf;
     };
+
+    // keep track of # of words in tree (need for O(1) runtime on wordCount())
     int wordCount;
+
+    // data member to keep track of root
     TrieNode* root;
     
+    //
+    // newNode()
+    // function creates, initializes, and returns a new TrieNode
+    //
     TrieNode* newNode() {
       TrieNode* newNode = new TrieNode;
       newNode->isLeaf = false;
@@ -37,6 +51,10 @@ class Trie {
       return newNode;
     }
 
+    //
+    // freeTrieNode()
+    // function frees all nodes in the tree
+    //
     void freeTrieNode(TrieNode* node) {
       // Free the trienode sequence
       for(int i = 0; i < LETTERS; i++) {
@@ -86,8 +104,34 @@ class Trie {
      * return:  indicates success/failure
      */
     bool insert(string word){
+      //
+      // start with root
+      //
+      TrieNode* cur = root;
+      int letter;
 
-      return false;
+      for (auto c : word) {
+        // get index of current letter
+        letter = c - 'a';
+
+        // if path does not exist, make new trie node at index
+        if (!cur->children[letter]) {
+          cur->children[letter] = newNode();
+        }
+
+        // go to next letter in path
+        cur = cur->children[letter];
+      }
+
+      // if last letter is a leaf, word already exists, return false
+      if (cur->isLeaf) {
+        return false;
+      } 
+      
+      // if word doesnt exist yet, mark final letter as a leaf and return true
+      cur->isLeaf = true;
+      wordCount++;
+      return true;
     }
 
     /*
@@ -101,7 +145,26 @@ class Trie {
      */
     bool search(string word) const{
 
-      return false;
+      // start with root
+      TrieNode* cur = root;
+      int letter;
+
+      for (auto c : word) {
+        // get index of current letter
+        letter = c - 'a';
+
+        // if path does not exist, word does not exist; return false
+        if (!cur->children[letter]) {
+          return false;
+        }
+
+        // go to next letter in path
+        cur = cur->children[letter];
+      }
+
+      // if isLeaf --> TRUE 
+      // if !isLeaf --> FALSE
+      return cur->isLeaf;
     }
 
     /*
@@ -141,7 +204,7 @@ class Trie {
      * comment/note:  this should have an O(1) runtime.
      */
     int wordCount( ) const{
-      return 0;
+      return wordCount;
     }    
 
 
