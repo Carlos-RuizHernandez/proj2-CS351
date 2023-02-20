@@ -186,7 +186,7 @@ class Trie {
      * comment/note:  this should have an O(1) runtime.
      */
     int wordCount( ) const{
-      return 0;
+      return wordCount;
     }    
 
 
