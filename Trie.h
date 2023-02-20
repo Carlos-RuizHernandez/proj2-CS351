@@ -86,8 +86,33 @@ class Trie {
      * return:  indicates success/failure
      */
     bool insert(string word){
+      //
+      // start with root
+      //
+      TrieNode* cur = root;
+      int letter;
 
-      return false;
+      for (auto c : word) {
+        // get index of current letter
+        letter = c - 'a';
+
+        // if path does not exist, make new trie node at index
+        if (!cur->children[letter]) {
+          cur->children[letter] = newNode();
+        }
+
+        // go to next letter in path
+        cur = cur->children[letter];
+      }
+
+      // if last letter is a leaf, word already exists, return false
+      if (cur->isLeaf) {
+        return false;
+      } 
+      
+      // if word doesnt exist yet, mark final letter as a leaf and return true
+      cur->isLeaf = true;
+      return true;
     }
 
     /*
@@ -101,7 +126,26 @@ class Trie {
      */
     bool search(string word) const{
 
-      return false;
+      // start with root
+      TrieNode* cur = root;
+      int letter;
+
+      for (auto c : word) {
+        // get index of current letter
+        letter = c - 'a';
+
+        // if path does not exist, word does not exist; return false
+        if (!cur->children[letter]) {
+          return false;
+        }
+
+        // go to next letter in path
+        cur = cur->children[letter];
+      }
+
+      // if isLeaf --> TRUE 
+      // if !isLeaf --> FALSE
+      return cur->isLeaf;
     }
 
     /*
