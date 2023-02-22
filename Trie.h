@@ -52,6 +52,18 @@ class Trie {
     }
 
     //
+    // returns true if the given node has any non-null children, false otherwise
+    // This function is used in the remove function to check if a given node has a subtree
+    //
+    bool hasChildren(TrieNode* node) {
+      for (int i = 0; i < LETTERS; i++) {
+        if (node->children[i])
+          return true;
+      }
+      return false;
+    }
+
+    //
     // freeTrieNode()
     // function frees all nodes in the tree
     //
@@ -178,7 +190,40 @@ class Trie {
      * return:  indicates success/failure
      */
     bool remove(string word){
+      if (!hasChildren(root))
+        return false;
 
+      if (word.length() == 0) {
+        return true;
+      }
+
+      TrieNode* cur = root;
+      int letter;
+
+      for (auto c : word) {
+        // get index of current letter
+        letter = c - 'a';
+
+        // if path does not exist, word does not exist; return false
+        if (!cur->children[letter]) {
+          return false;
+        }
+
+        // go to next letter in path
+        cur = cur->children[letter];
+      }
+
+
+
+      if (!hasChildren(cur)) {
+        delete cur;
+        word.pop_back();
+        remove(word);
+      } else {
+        cur->isLeaf = false;
+        return true;
+      }
+      
       return false;
     }
 
