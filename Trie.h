@@ -131,26 +131,33 @@ class Trie {
       string line;
       bool isValidWord;
 
-      // 
+      // open file
       ifstream input_file(filename);
 
+      // check if file opened successfully, if not - return false
       if (!input_file.is_open()) {
         return false;
       }
 
+      // go through every word in file, line by line
       while (getline(input_file, line)) {
         isValidWord = true;
+
+        // loop through every character in word to check if it only contains letters
         for (auto c : line) {
+          // if character is not in the alphabet, not a valid word
           if(!isalpha(c)) {
             isValidWord = false;
           }
         }
+
+        // if word only contains letters, insert into trie
         if (isValidWord) {
           insert(line);
         }
       }
 
-
+      return true;
     }
 
     /*
