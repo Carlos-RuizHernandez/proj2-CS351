@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <fstream>
 using namespace std;
 
 
@@ -79,6 +79,30 @@ class Trie {
     }
     free(node);
     }
+    
+    //
+    // buildWordVector()
+    // build and returns a vector of all words in the trie in ascending order
+    //
+    void buildWordVector(TrieNode* node, char str[], int level, vector<string>*& words) const{
+
+      // if leaf is found, add end of string character to string and push_back to word vector
+      if (node->isLeaf) {
+        str[level] = '\0';
+        words->push_back(str);
+      }
+
+      // look for any paths from current node
+      for (int i = 0; i < LETTERS; i++) {
+
+        // if path is found, add letter to string and recursively call buildWordVector
+        if (node->children[i]) {
+          str[level] = i + 'a';
+          // recursive call takes the next letter in the path, the current string, the next index of the string, and the vector of words to return
+          buildWordVector(node->children[i], str, level + 1, words);
+        }
+      }
+    }
   public:
     /**
     * constructor and destructor
@@ -103,7 +127,30 @@ class Trie {
      * return:  indicates success/failure (file not readable...)
      */
     bool getFromFile(string filename){
-      return false;
+
+      string line;
+      bool isValidWord;
+
+      // 
+      ifstream input_file(filename);
+
+      if (!input_file.is_open()) {
+        return false;
+      }
+
+      while (getline(input_file, line)) {
+        isValidWord = true;
+        for (auto c : line) {
+          if(!isalpha(c)) {
+            isValidWord = false;
+          }
+        }
+        if (isValidWord) {
+          insert(line);
+        }
+      }
+
+
     }
 
     /*
@@ -235,7 +282,12 @@ class Trie {
      * return:  indicates success/failure
      */
     bool clear(){
-      return false;
+      // deallocate all nodes
+      freeTrieNode(root);
+
+      // create new root node
+      root = newNode();
+      return true;
     }
 
 
@@ -262,8 +314,11 @@ class Trie {
      *
      */
     std::vector<string>* words( ) const{
-      
-      return nullptr;
+      vector<string>* words = new vector<string>;
+      char str[100];
+      int level = 0;
+      buildWordVector(root, str, level, words);
+      return words;
     }
 
 
