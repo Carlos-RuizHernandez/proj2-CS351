@@ -7,33 +7,126 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
 
 using std::cout;
 using std::cin;
 using std::string;
 
 void getNewDictionary(SBTrie *sbt, string filename){
-  // enter needed code here for command 1
+  sbt->newDictionary(filename);
 }
 
 void updateDictionary(SBTrie *sbt, string filename){
-  // enter needed code here for command 2
+  sbt->updateDictionary(filename);
 }
 
 void setupLetters(SBTrie *sbt, string letters){
-  // enter needed code here for command 3
+  // check if input was 7 letters long
+  if (letters.length() != 7) {
+    cout << "Invalid letter set" << endl;
+    return;
+  }
+
+  char centralLetter;
+  string allowedLetters = "";
+  // check for first valid letter --- will be assigned as central letter
+  bool firstValidLetter = true;
+
+  for (int i = 0; i < letters.length(); i++) {
+    // check if character at index is in the alphabet
+    if (isalpha(letters[i])) { 
+      // check whether its in the allowedLetters string or the central letter
+      if (firstValidLetter) {
+        centralLetter = tolower(letters[i]);
+        firstValidLetter = false;
+      } else {
+        allowedLetters += tolower(letters[i]);
+      }
+      sbt->setRules(centralLetter, allowedLetters);
+    }
+  }
+
+  // reset state of the game
+  sbt->resetState();
+
 }
 
 void showLetters(SBTrie *sbt){
-  // enter needed code here for command 4
+  sbt->printLetters();
 }
 
 void attemptWord(SBTrie *sbt, string letters){
-  // enter needed code here for command 5
+  char centralLetter;
+  string allowedLetters;
+
+  sbt->getLetters(centralLetter, allowedLetters);
+  std::transform(letters.begin(), letters.end(), letters.begin(), ::tolower);
+
+  // check if word is too short or is missing central letter
+  if (letters.length() < 4) {
+    cout << "word is too short" << endl;
+    return;
+  } else if (letters.find(centralLetter) == std::string::npos) {
+    cout << "word is missing central letter" << endl;
+    return;
+  }
+
+  // check for any invalid letters
+  for (auto c: letters) {
+    if (allowedLetters.find(c) == std::string::npos && c != centralLetter) {
+      cout << "word contains invalid letter" << endl;
+      return;
+    }
+  }
+
+  // check if word is in the dictionary
+  if (!sbt->searchDictionary(letters)) {
+    cout << "word is not in the dictionary" << endl;
+    return;
+  }
+
+  // check if word has already been found
+  if (sbt->searchFoundWords(letters)) {
+    cout << "word has already been found" << endl;
+    return;
+  }
+
+  int overallScore;
+  int pointsScored;
+  bool foundPangram = false;
+  bool scoredBingo = false;
+
+  sbt->wordFound(letters, pointsScored, overallScore, foundPangram, scoredBingo);
+
+  string message = "found " + letters + " " + to_string(pointsScored) + " ";
+
+  if (pointsScored == 1) {
+    message += "point, total " + to_string(overallScore);
+  } else {
+    message += "points, total " + to_string(overallScore);
+  }
+
+  if (overallScore == 1) {
+    message += " point";
+  } else {
+    message += " points";
+  }
+
+  if (foundPangram) {
+    message += ", Pangram found";
+  } 
+
+  if (scoredBingo) {
+    message += ", Bingo scored";
+  }
+
+  cout << message << endl;
+
 }
 
 void showFoundWords(SBTrie *sbt){
-  // enter needed code here for command 6
+  sbt->displayInfo();
 }
 
 void showAllWords(SBTrie *sbt){

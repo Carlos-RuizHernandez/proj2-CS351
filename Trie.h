@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 using namespace std;
 
 
@@ -33,7 +34,7 @@ class Trie {
     };
 
     // keep track of # of words in tree (need for O(1) runtime on wordCount())
-    int wordCount;
+    int numWords;
 
     // data member to keep track of root
     TrieNode* root;
@@ -110,11 +111,19 @@ class Trie {
     Trie()   {
       // your constructor code here!
       root = newNode();
-      wordCount = 0;
+      numWords = 0;
     }
     ~Trie(){
       // your destructor code here.
       freeTrieNode(root);
+    }
+
+    //
+    // getRoot()
+    // returns the root of the trie
+    //
+    TrieNode* getRoot() {
+      return root;
     }
 
     /*
@@ -153,6 +162,7 @@ class Trie {
 
         // if word only contains letters, insert into trie
         if (isValidWord) {
+          std::transform(line.begin(), line.end(), line.begin(), ::tolower);
           insert(line);
         }
       }
@@ -196,7 +206,7 @@ class Trie {
       
       // if word doesnt exist yet, mark final letter as a leaf and return true
       cur->isLeaf = true;
-      wordCount++;
+      numWords++;
       return true;
     }
 
@@ -308,7 +318,7 @@ class Trie {
      * comment/note:  this should have an O(1) runtime.
      */
     int wordCount( ) const{
-      return wordCount;
+      return numWords;
     }    
 
 
