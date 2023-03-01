@@ -151,7 +151,7 @@ class Trie {
       // go through every word in file, line by line
       while (getline(input_file, line)) {
         isValidWord = true;
-
+        line.erase(line.length()-1);
         // loop through every character in word to check if it only contains letters
         for (auto c : line) {
           // if character is not in the alphabet, not a valid word
@@ -304,6 +304,7 @@ class Trie {
 
       // create new root node
       root = newNode();
+      numWords = 0;
       return true;
     }
 
