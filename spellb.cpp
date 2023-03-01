@@ -130,7 +130,15 @@ void showFoundWords(SBTrie *sbt){
 }
 
 void showAllWords(SBTrie *sbt){
-  // enter needed code here for command 7
+  char central;
+  string allowed;
+  sbt->getLetters(central, allowed);
+  vector<string> *sbWords = sbt->sbWords(central, allowed);
+
+  for (auto word : *sbWords) {
+    // TODO add the case where is the word is a pangram, print pangram after the word length
+    cout << word << setw(20 - word.length()) << word.length() << endl;
+  }
 }
 
 void displayCommands(){
