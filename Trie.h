@@ -304,6 +304,7 @@ class Trie {
 
       // create new root node
       root = newNode();
+      numWords = 0;
       return true;
     }
 
