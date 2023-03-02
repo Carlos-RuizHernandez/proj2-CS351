@@ -138,7 +138,6 @@ void showAllWords(SBTrie *sbt){
   for (auto word : *sbWords) {
     // check if word is a Pangram
     bool pangramCheck = false;
-    int count;
     vector<char> letters;
     for (auto c : word) {
       // check if letter has been encountered before

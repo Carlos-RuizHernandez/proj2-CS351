@@ -176,7 +176,6 @@ class SBTrie: public Trie {
       foundWords->insert(word);
       // check if word is a Pangram
       bool pangramCheck = false;
-      int count;
       vector<char> letters;
 
       for (auto c : word) {
