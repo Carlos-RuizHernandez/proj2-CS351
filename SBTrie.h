@@ -52,8 +52,9 @@ class SBTrie: public Trie {
 
       // if leaf is found, add end of string character to string and push_back to word vector
       if (node->isLeaf) {
-        // word needs to be at least 4 letters, check that string index is at least 4
-        if (level > 3) {
+        string word = str;
+        // word needs to be at least 4 letters, check that string index is at least 4. Also make sure string contains central letter
+        if (level > 3 && word.find(centralLetter) != std::string::npos) {
           str[level] = '\0';
           words->push_back(str);
         }
@@ -173,14 +174,29 @@ class SBTrie: public Trie {
     void wordFound(string word, int& pointsScored, int& overallScore, bool& foundPangram, bool& scoredBingo) {
       // add word to found words trie
       foundWords->insert(word);
+      // check if word is a Pangram
+      bool pangramCheck = false;
+      int count;
+      vector<char> letters;
+
+      for (auto c : word) {
+        // check if letter has been encountered before
+        if (find(letters.begin(), letters.end(), c) == letters.end()) {
+          letters.push_back(c);
+        }
+      }
+      // check if vector contains all 7 letters
+      if (letters.size() == 7) {
+        pangramCheck = true;
+      }
 
       // calculate score
       if (word.length() == 4) {
         score += 1;
         pointsScored = 1;
-      } else if (word.length() == 7) {
-        score += 14;
-        pointsScored = 14;
+      } else if (pangramCheck) {
+        score += word.length() + 7;
+        pointsScored = word.length() + 7;
         foundPangram = true;
       } else {
         score += word.length();
