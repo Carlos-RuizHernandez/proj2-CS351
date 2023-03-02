@@ -52,8 +52,9 @@ class SBTrie: public Trie {
 
       // if leaf is found, add end of string character to string and push_back to word vector
       if (node->isLeaf) {
-        // word needs to be at least 4 letters, check that string index is at least 4
-        if (level > 3) {
+        string word = str;
+        // word needs to be at least 4 letters, check that string index is at least 4. Also make sure string contains central letter
+        if (level > 3 && word.find(centralLetter) != std::string::npos) {
           str[level] = '\0';
           words->push_back(str);
         }
@@ -188,7 +189,7 @@ class SBTrie: public Trie {
       if (letters.size() == 7) {
         pangramCheck = true;
       }
-      
+
       // calculate score
       if (word.length() == 4) {
         score += 1;
