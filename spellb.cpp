@@ -136,8 +136,13 @@ void showAllWords(SBTrie *sbt){
   vector<string> *sbWords = sbt->sbWords(central, allowed);
 
   for (auto word : *sbWords) {
-    // TODO add the case where is the word is a pangram, print pangram after the word length
-    cout << word << setw(20 - word.length()) << word.length() << endl;
+    // check if word is a Pangram
+    if (word.length() == 7) {
+      cout << word << setw(20 - word.length()) << word.length() << " Pangram" << endl;
+    } else {
+      cout << word << setw(20 - word.length()) << word.length() << endl;
+    }
+    
   }
 }
 
@@ -230,5 +235,6 @@ int main(int argc, char** argv){
 
   } while(!done && !cin.eof());
 
+  delete sbt;
   return 0;
 }
