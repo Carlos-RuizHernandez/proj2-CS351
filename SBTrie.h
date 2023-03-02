@@ -94,7 +94,8 @@ class SBTrie: public Trie {
       bingo = "";
     }
     ~SBTrie(){
-      // your destructor code here.
+      delete dictionary;
+      delete foundWords;
     }
 
     //

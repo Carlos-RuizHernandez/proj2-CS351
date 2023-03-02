@@ -156,6 +156,7 @@ void showAllWords(SBTrie *sbt){
     }
     
   }
+  delete sbWords;
 }
 
 void displayCommands(){
