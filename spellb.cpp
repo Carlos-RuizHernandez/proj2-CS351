@@ -137,7 +137,20 @@ void showAllWords(SBTrie *sbt){
 
   for (auto word : *sbWords) {
     // check if word is a Pangram
-    if (word.length() == 7) {
+    bool pangramCheck = false;
+    int count;
+    vector<char> letters;
+    for (auto c : word) {
+      // check if letter has been encountered before
+      if (find(letters.begin(), letters.end(), c) == letters.end()) {
+        letters.push_back(c);
+      }
+    }
+
+    if (letters.size() == 7) {
+      pangramCheck = true;
+    }
+    if (pangramCheck) {
       cout << word << setw(20 - word.length()) << word.length() << " Pangram" << endl;
     } else {
       cout << word << setw(20 - word.length()) << word.length() << endl;

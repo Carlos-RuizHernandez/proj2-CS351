@@ -173,14 +173,29 @@ class SBTrie: public Trie {
     void wordFound(string word, int& pointsScored, int& overallScore, bool& foundPangram, bool& scoredBingo) {
       // add word to found words trie
       foundWords->insert(word);
+      // check if word is a Pangram
+      bool pangramCheck = false;
+      int count;
+      vector<char> letters;
 
+      for (auto c : word) {
+        // check if letter has been encountered before
+        if (find(letters.begin(), letters.end(), c) == letters.end()) {
+          letters.push_back(c);
+        }
+      }
+      // check if vector contains all 7 letters
+      if (letters.size() == 7) {
+        pangramCheck = true;
+      }
+      
       // calculate score
       if (word.length() == 4) {
         score += 1;
         pointsScored = 1;
-      } else if (word.length() == 7) {
-        score += 14;
-        pointsScored = 14;
+      } else if (pangramCheck) {
+        score += word.length() + 7;
+        pointsScored = word.length() + 7;
         foundPangram = true;
       } else {
         score += word.length();
