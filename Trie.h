@@ -77,8 +77,8 @@ class Trie {
         else {
             continue;
         }
-    }
-    free(node);
+      }
+      delete node;
     }
     
     //
